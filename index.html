@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Cutiepie!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fredoka+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #1b0c26 0%, #0a0410 100%);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 430px;
+      height: 100vh;
+      max-height: 932px;
+      position: relative;
+      background: radial-gradient(circle at top, #2d0e3a 0%, #0d0314 100%);
+      box-shadow: 0 0 40px rgba(255, 105, 180, 0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .banner {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 60px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #ff4081,
+        #ff4081 15px,
+        #ffeb3b 15px,
+        #ffeb3b 30px,
+        #00e676 30px,
+        #00e676 45px,
+        #29b6f6 45px,
+        #29b6f6 60px
+      );
+      clip-path: polygon(
+        0 0, 100% 0, 100% 70%, 90% 100%, 80% 70%, 70% 100%, 60% 70%, 50% 100%, 40% 70%, 30% 100%, 20% 70%, 10% 100%, 0 70%
+      );
+      z-index: 10;
+      animation: bannerGlow 3s infinite alternate;
+    }
+
+    @keyframes bannerGlow {
+      0% { filter: drop-shadow(0 2px 5px rgba(255, 64, 129, 0.5)); }
+      100% { filter: drop-shadow(0 4px 15px rgba(255, 235, 59, 0.8)); }
+    }
+
+    .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 70px 24px 30px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      transform: scale(0.95);
+      z-index: 1;
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+      z-index: 2;
+    }
+
+    .countdown-circle {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: transparent;
+      border: 6px solid transparent;
+      border-top-color: #ff2a8d;
+      border-right-color: #00d2ff;
+      border-bottom-color: #ff2a8d;
+      border-left-color: #00d2ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 30px rgba(255, 42, 141, 0.6), inset 0 0 20px rgba(0, 210, 255, 0.4);
+      animation: rotateRing 2s linear infinite;
+    }
+
+    @keyframes rotateRing {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .countdown-number {
+      font-family: 'Fredoka One', cursive;
+      font-size: 85px;
+      color: #ff60be;
+      text-shadow: 0 0 20px #ff007f;
+      animation: pulseNum 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseNum {
+      0% { transform: scale(0.9); }
+      100% { transform: scale(1.1); }
+    }
+
+    .crafting-text {
+      margin-top: 40px;
+      font-family: 'Caveat', cursive;
+      font-size: 32px;
+      color: #e280ff;
+      text-shadow: 0 0 10px rgba(226, 128, 255, 0.6);
+      text-align: center;
+    }
+
+    .title-text {
+      font-family: 'Caveat', cursive;
+      font-size: 42px;
+      color: #ff7be5;
+      text-shadow: 0 0 12px rgba(255, 123, 229, 0.7);
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .sub-text {
+      font-size: 16px;
+      color: #d1b3e6;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .btn-gradient {
+      background: linear-gradient(90deg, #ff007f, #7f00ff);
+      color: white;
+      border: none;
+      padding: 14px 36px;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 0, 127, 0.5);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-gradient:hover {
+      transform: translateY(-3deg) scale(1.03);
+      box-shadow: 0 12px 30px rgba(255, 0, 127, 0.7);
+    }
+
+    .gif-sticker {
+      width: 130px;
+      height: 130px;
+      object-fit: contain;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
+      animation: floatAnim 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatAnim {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-12px); }
+    }
+
+    .cake-container {
+      position: relative;
+      width: 220px;
+      height: 160px;
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .cake-base {
+      width: 200px;
+      height: 85px;
+      background: linear-gradient(to bottom, #5c2c16, #3b190a);
+      border-radius: 15px 15px 25px 25px;
+      position: relative;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    .cake-icing {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 30px;
+      background: #fff;
+      border-radius: 15px;
+    }
+
+    .icing-drip {
+      position: absolute;
+      top: 22px;
+      background: #fff;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+    }
+
+    .cake-plate {
+      width: 240px;
+      height: 16px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    }
+
+    .candle {
+      width: 14px;
+      height: 45px;
+      background: repeating-linear-gradient(45deg, #ff3366, #ff3366 8px, #ffffff 8px, #ffffff 16px);
+      border-radius: 4px;
+      position: absolute;
+      top: 22px;
+      z-index: 5;
+    }
+
+    .flame {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 22px;
+      background: linear-gradient(to top, #ff9900, #ffcc00, #ffffff);
+      border-radius: 50% 50% 35% 35%;
+      box-shadow: 0 0 15px #ff9900, 0 0 30px #ffcc00;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      animation: flicker 0.6s infinite alternate;
+    }
+
+    .flame.lit {
+      opacity: 1;
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(0.95) rotate(-2deg); }
+      100% { transform: translateX(-50%) scale(1.05) rotate(2deg); }
+    }
+
+    .balloon-cluster {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      align-items: flex-end;
+      height: 200px;
+      margin: 15px 0;
+      position: relative;
+    }
+
+    .balloon-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .balloon-wrapper:hover {
+      transform: scale(1.08);
+    }
+
+    .balloon {
+      width: 60px;
+      height: 75px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      position: relative;
+      box-shadow: inset -8px -8px 15px rgba(0,0,0,0.2);
+    }
+
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 7px solid inherit;
+    }
+
+    .b-pink { background: #ff4081; }
+    .b-pink::after { border-bottom-color: #ff4081; }
+    .b-yellow { background: #ffc107; }
+    .b-yellow::after { border-bottom-color: #ffc107; }
+    .b-green { background: #00e676; }
+    .b-green::after { border-bottom-color: #00e676; }
+    .b-blue { background: #29b6f6; }
+    .b-blue::after { border-bottom-color: #29b6f6; }
+
+    .balloon-string {
+      width: 2px;
+      height: 90px;
+      background: rgba(255,255,255,0.4);
+    }
+
+    .pop-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ff80ab;
+      height: 30px;
+      margin-top: 10px;
+      text-shadow: 0 0 10px rgba(255, 128, 171, 0.5);
+    }
+
+    .card-container {
+      width: 290px;
+      height: 370px;
+      perspective: 1000px;
+      margin: 10px 0;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+    }
+
+    .card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      border: 3px solid #ff60be;
+    }
+
+    .card-front {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      text-align: center;
+    }
+
+    .card-back {
+      background: #ffffff;
+      color: #333;
+      transform: rotateY(180deg);
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    .card-back p {
+      font-family: 'Caveat', cursive;
+      font-size: 20px;
+      line-height: 1.35;
+      color: #4a154b;
+    }
+
+    .gift-box {
+      width: 130px;
+      height: 130px;
+      position: relative;
+      cursor: pointer;
+      margin: 25px 0;
+      transition: transform 0.3s;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.05);
+    }
+
+    .gift-body {
+      width: 100%;
+      height: 90px;
+      position: absolute;
+      bottom: 0;
+      background: #ff3366;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    }
+
+    .gift-lid {
+      width: 110%;
+      height: 32px;
+      background: #ff1744;
+      position: absolute;
+      top: 10px;
+      left: -5%;
+      border-radius: 8px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+      transition: transform 0.5s ease;
+      z-index: 2;
+    }
+
+    .gift-box.open .gift-lid {
+      transform: translateY(-45px) rotate(-15deg);
+    }
+
+    .ribbon-v {
+      width: 22px;
+      height: 100%;
+      background: #ffeb3b;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .ribbon-h {
+      width: 100%;
+      height: 22px;
+      background: #ffeb3b;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .final-card {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      border-radius: 24px;
+      padding: 25px 20px;
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music Audio -->
+  <audio id="bg-music" src="kkk.mp3" loop></audio>
+
+  <div class="app-container">
+    <div class="banner"></div>
+
+    <!-- SCREEN 1: COUNTDOWN -->
+    <div class="screen active" id="s-countdown">
+      <div class="countdown-circle">
+        <div class="countdown-number" id="cd-num">3</div>
+      </div>
+      <div class="crafting-text">Crafting your special moment...</div>
+    </div>
+
+    <!-- SCREEN 2: INTRO -->
+    <div class="screen" id="s-intro">
+      <img src="kkk1.gif" class="gif-sticker" alt="Intro GIF">
+      <div class="title-text">A Cutiepie was born today, 21 years ago!</div>
+      <div class="sub-text">Yes, it's YOU! A little surprise awaits...</div>
+      <button class="btn-gradient" onclick="startSurprise()">
+        🎁 Start the surprise
+      </button>
+    </div>
+
+    <!-- SCREEN 3: CAKE -->
+    <div class="screen" id="s-cake">
+      <div class="title-text" id="cake-title">Light the candle!</div>
+      <img src="kkk2.gif" style="width: 90px; height: 90px; object-fit: contain; margin-bottom: 5px;" alt="Cake GIF">
+      <div class="cake-container">
+        <div class="candle">
+          <div class="flame" id="candle-flame"></div>
+        </div>
+        <div class="cake-base">
+          <div class="cake-icing"></div>
+          <div class="icing-drip" style="left: 10px;"></div>
+          <div class="icing-drip" style="left: 45px;"></div>
+          <div class="icing-drip" style="left: 90px;"></div>
+          <div class="icing-drip" style="left: 135px;"></div>
+        </div>
+        <div class="cake-plate"></div>
+      </div>
+      <button class="btn-gradient" id="cake-btn" onclick="lightCandle()">
+        🔥 Light the Candle
+      </button>
+    </div>
+
+    <!-- SCREEN 4: BALLOONS -->
+    <div class="screen" id="s-balloons">
+      <div class="title-text">Pop all 4 balloons</div>
+      <div class="balloon-cluster">
+        <div class="balloon-wrapper" onclick="popBalloon(this, 'You')">
+          <div class="balloon b-pink"></div>
+          <div class="balloon-string"></div>
+        </div>
+        <div class="balloon-wrapper" onclick="popBalloon(this, 'are')">
+          <div class="balloon b-yellow"></div>
+          <div class="balloon-string"></div>
+        </div>
+        <div class="balloon-wrapper" onclick="popBalloon(this, 'a')">
+          <div class="balloon b-green"></div>
+          <div class="balloon-string"></div>
+        </div>
+        <div class="balloon-wrapper" onclick="popBalloon(this, 'Cutiee')">
+          <div class="balloon b-blue"></div>
+          <div class="balloon-string"></div>
+        </div>
+      </div>
+      <div class="pop-text" id="balloon-msg"></div>
+      <button class="btn-gradient" id="balloon-next" style="display:none;" onclick="nextScreen('s-card')">
+        Next ➔
+      </button>
+    </div>
+
+    <!-- SCREEN 5: CARD -->
+    <div class="screen" id="s-card">
+      <div class="title-text">A Special Message</div>
+      <div class="card-container">
+        <div class="card-inner" id="card-element" onclick="flipCard()">
+          <div class="card-front">
+            <h2 style="font-family:'Caveat'; font-size: 36px; color:#fff; margin-bottom:10px;">Happy Birthday To You</h2>
+            <div style="background:rgba(255,255,255,0.2); padding:8px 18px; border-radius:20px; font-size:14px;">
+              Tap to Open ✉️
+            </div>
+          </div>
+          <div class="card-back">
+            <img src="kkk3.gif" style="width: 70px; height: 70px; object-fit: contain; margin-bottom: 5px;" alt="Card GIF">
+            <p>
+              Happy Birthday, Cutiepie! <br><br>
+              You deserve all the happiness, love, and smiles in the world today and always. You have this special way of making everything around you brighter.
+              <br><br>
+              I hope your day is filled with laughter and moments that make your heart happy! ❤️
+            </p>
+          </div>
+        </div>
+      </div>
+      <button class="btn-gradient" onclick="nextScreen('s-gift')">
+        Next ➔
+      </button>
+    </div>
+
+    <!-- SCREEN 6: GIFT -->
+    <div class="screen" id="s-gift">
+      <div class="title-text">One Last Thing...</div>
+      <div class="gift-box" id="gift-element" onclick="openGift()">
+        <div class="gift-lid">
+          <div class="ribbon-v"></div>
+        </div>
+        <div class="gift-body">
+          <div class="ribbon-v"></div>
+          <div class="ribbon-h"></div>
+        </div>
+      </div>
+      <div class="sub-text">Tap the gift 🎁</div>
+    </div>
+
+    <!-- SCREEN 7: FINAL -->
+    <div class="screen" id="s-final">
+      <div class="final-card">
+        <img src="kkk4.gif" class="gif-sticker" alt="Final GIF">
+        <h2 style="font-family:'Caveat', cursive; font-size:34px; margin-bottom:8px;">Lots of love for you ❤️</h2>
+        <p style="font-size:14px; margin-bottom:15px; line-height:1.4;">Once again, Happy Birthday! Hope you loved your surprise.</p>
+        <button class="btn-gradient" onclick="restart()">
+          🔄 Replay
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // COUNTDOWN LOGIC
+    let count = 3;
+    const cdElem = document.getElementById('cd-num');
+    const timer = setInterval(() => {
+      count--;
+      if (count > 0) {
+        cdElem.innerText = count;
+      } else if (count === 0) {
+        cdElem.innerText = '0';
+      } else {
+        clearInterval(timer);
+        nextScreen('s-intro');
+      }
+    }, 1000);
+
+    // SCREEN SWITCHER
+    function nextScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    // START SURPRISE & PLAY MUSIC
+    function startSurprise() {
+      const music = document.getElementById('bg-music');
+      music.play().catch(err => console.log("Audio play blocked:", err));
+      nextScreen('s-cake');
+    }
+
+    // CAKE LOGIC
+    let isLit = false;
+    function lightCandle() {
+      if (isLit) {
+        nextScreen('s-balloons');
+        return;
+      }
+      isLit = true;
+      document.getElementById('candle-flame').classList.add('lit');
+      document.getElementById('cake-title').innerText = "Happy Birthday, Cutiepiee!";
+      document.getElementById('cake-btn').innerText = "Pop the Balloons ➔";
+      
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    // BALLOON LOGIC
+    let poppedCount = 0;
+    let revealedWords = [];
+
+    function popBalloon(elem, word) {
+      if (elem.style.visibility === 'hidden') return;
+      elem.style.visibility = 'hidden';
+      poppedCount++;
+      revealedWords.push(word);
+      document.getElementById('balloon-msg').innerText = revealedWords.join(' ');
+
+      confetti({
+        particleCount: 25,
+        spread: 40,
+        origin: { y: 0.5 }
+      });
+
+      if (poppedCount === 4) {
+        document.getElementById('balloon-next').style.display = 'flex';
+      }
+    }
+
+    // CARD FLIP
+    function flipCard() {
+      document.getElementById('card-element').classList.toggle('flipped');
+    }
+
+    // GIFT LOGIC
+    function openGift() {
+      const gift = document.getElementById('gift-element');
+      gift.classList.add('open');
+      
+      confetti({
+        particleCount: 120,
+        spread: 100,
+        origin: { y: 0.5 }
+      });
+
+      setTimeout(() => {
+        nextScreen('s-final');
+      }, 1200);
+    }
+
+    // RESTART
+    function restart() {
+      location.reload();
+    }
+  </script>
+</body>
+          </html>
+      
